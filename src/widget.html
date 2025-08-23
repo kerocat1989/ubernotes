@@ -3,29 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Widget</title>
+    <title>UberNotes Widget</title>
     <link rel="stylesheet" href="widget.css">
 </head>
 <body>
-    <div class="weather-widget" id="weatherWidget">
+    <div class="widget-container" id="widgetContainer">
         <div class="widget-header">
-            <div class="close-btn" id="closeBtn">×</div>
-        </div>
-        
-        <div class="time-display">
-            <div class="time" id="currentTime">--:--</div>
-            <div class="date" id="currentDate">Loading...</div>
-        </div>
-        
-        <div class="weather-display">
-            <div class="location">Cupertino, CA</div>
-            <div class="weather-info">
-                <div class="temperature" id="temperature">--°</div>
-                <div class="weather-desc" id="weatherDesc">Loading...</div>
+            <div class="widget-controls">
+                <button class="control-btn voice-btn" id="voiceBtn" title="Voice Dictation (V)">🎤</button>
+                <button class="control-btn ai-btn" id="aiBtn" title="AI Mutator (A)">🤖</button>
+                <button class="control-btn close-btn" id="closeBtn" title="Close Widget">×</button>
             </div>
         </div>
         
-        <div class="resize-handle" id="resizeHandle"></div>
+        <div class="widget-content">
+            <div class="content-area" id="contentArea" contenteditable="true" 
+                 placeholder="Start typing your note..."></div>
+        </div>
+        
+        <div class="widget-footer">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <div class="resize-handle" id="resizeHandle"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="aiModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>AI Mutator</h3>
+                <button class="modal-close" id="aiModalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="aiInstruction" placeholder="Describe what you want to add..."></textarea>
+                <div class="modal-actions">
+                    <button id="aiApply" class="btn-primary">Apply</button>
+                    <button id="aiRevert" class="btn-secondary">Revert</button>
+                    <button id="aiCancel" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="widget.js"></script>

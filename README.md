@@ -11,6 +11,7 @@ Floating note widgets with AI assistance and voice dictation for macOS.
 ✅ **AI Mutator**: Press 'A' or click the robot icon to add templates like clocks, todo lists, meeting agendas  
 ✅ **Autostart**: Automatically restores all widgets in their last positions on system login  
 ✅ **Unsafe Changes Blocking**: Prevents navigation to external URLs and other security risks  
+✅ **Demo Widgets**: Pre-built widgets like weather displays and price charts to showcase functionality  
 ✅ **One-Minute Setup**: Install from DMG and create your first widget immediately  
 
 ## Quick Start
@@ -19,8 +20,9 @@ Floating note widgets with AI assistance and voice dictation for macOS.
 2. **Create Widget**: Press `Cmd+Shift+N` to create your first floating note widget
 3. **Voice Input**: Focus a widget and press `V` to start voice dictation
 4. **AI Templates**: Press `A` to add templates like "add a clock" or "create a todo list"
-5. **Shortcuts**: 
-   - `Cmd+N` or `Cmd+Shift+N`: New widget
+5. **Demo Widgets**: Access pre-built widgets via **UberNotes → Demo Widgets** menu
+6. **Shortcuts**: 
+   - `Cmd+N` or `Cmd+Shift+N`: New note widget
    - `V`: Voice dictation (when widget focused)
    - `A`: AI mutator (when widget focused)
 
@@ -49,6 +51,22 @@ The AI mutator provides intelligent template insertion:
 3. Click "Apply" to add the template
 4. Use "Revert" to undo the last change
 
+## Demo Widgets
+
+UberNotes includes several pre-built demo widgets to showcase different use cases:
+
+### 🌤️ Cupertino Weather
+- Real-time weather and clock display for Cupertino, CA
+- Dynamic background themes based on weather conditions
+- Glassmorphism design with backdrop blur effects
+
+### 📈 Ethereum Price Chart
+- Live ETH/USD price tracking with interactive charts
+- 7-day and 30-day historical data visualization
+- Real-time price updates with change indicators
+
+**Access Demo Widgets**: Go to **UberNotes → Demo Widgets** in the application menu or use the IPC API to create them programmatically.
+
 ## Development
 
 ```bash
@@ -67,10 +85,11 @@ npm run build
 
 ## Architecture
 
-- **Main Process** (`src/main.js`): Electron main process, widget management, state persistence
+- **Main Process** (`src/main.js`): Electron main process, widget management, state persistence, demo registry
 - **Widget Windows**: Borderless, resizable windows with individual HTML/CSS/JS
 - **Preload Script** (`src/preload.js`): Secure communication bridge between main and renderer
-- **Widget UI** (`src/widget.html/css/js`): Individual widget interface and functionality
+- **Note Widget** (`src/widget.html/css/js`): Default note-taking widget with AI assistance and voice input
+- **Demo Widgets** (`demos/*/`): Pre-built specialized widgets (weather, charts, etc.)
 - **State Storage**: Uses `electron-store` for persistent configuration and widget states
 
 ## Cross-Platform Considerations

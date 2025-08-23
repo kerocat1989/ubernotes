@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereum Price Chart</title>
+    <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+    <div class="eth-widget" id="ethWidget">
+        <div class="widget-header">
+            <div class="widget-title">ETH/USD</div>
+            <div class="close-btn" id="closeBtn">×</div>
+        </div>
+        
+        <div class="price-display">
+            <div class="current-price" id="currentPrice">$---.--</div>
+            <div class="price-change" id="priceChange">+0.00%</div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="priceChart" width="260" height="120"></canvas>
+        </div>
+        
+        <div class="time-range">
+            <button class="range-btn active" data-range="7d">7D</button>
+            <button class="range-btn" data-range="30d">30D</button>
+            <div class="last-updated" id="lastUpdated">Last updated: --</div>
+        </div>
+        
+        <div class="resize-handle" id="resizeHandle"></div>
+    </div>
+
+    <script src="widget.js"></script>
+</body>
+</html>

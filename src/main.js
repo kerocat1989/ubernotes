@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain, globalShortcut, screen } = require('e
 const path = require('path');
 const Store = require('electron-store');
 const log = require('electron-log');
+const fs = require('fs');
 
 // Configure logging
 log.transports.file.level = 'debug';
@@ -21,6 +22,22 @@ const store = new Store({
 
 let widgets = new Map();
 let isQuitting = false;
+
+// Demo widget registry
+const DEMO_WIDGETS = {
+  'cupertino-weather': {
+    name: 'Cupertino Weather',
+    description: 'Weather and time for Cupertino, CA',
+    path: 'demos/cupertino-weather',
+    defaultSize: { width: 280, height: 200 }
+  },
+  'eth-price-chart': {
+    name: 'Ethereum Price Chart',
+    description: 'Live ETH/USD price chart with 7-day history',
+    path: 'demos/eth-price-chart',
+    defaultSize: { width: 320, height: 280 }
+  }
+};
 
 // Hide dock icon during normal use
 if (process.platform === 'darwin') {
@@ -57,11 +74,15 @@ class WidgetManager {
     const primaryDisplay = screen.getPrimaryDisplay();
     const { width, height } = primaryDisplay.workAreaSize;
     
+    // Check if this is a demo widget
+    const demoWidget = options.template && DEMO_WIDGETS[options.template];
+    const defaultSize = demoWidget ? demoWidget.defaultSize : { width: 300, height: 200 };
+    
     const defaultOptions = {
-      width: 300,
-      height: 200,
-      x: Math.floor(Math.random() * (width - 300)),
-      y: Math.floor(Math.random() * (height - 200)),
+      width: defaultSize.width,
+      height: defaultSize.height,
+      x: Math.floor(Math.random() * (width - defaultSize.width)),
+      y: Math.floor(Math.random() * (height - defaultSize.height)),
       content: '',
       template: 'note'
     };
@@ -95,8 +116,15 @@ class WidgetManager {
       }
     });
 
-    // Load widget UI
-    widget.loadFile(path.join(__dirname, 'widget.html'));
+    // Load widget UI - use demo widget path if specified
+    let widgetPath = path.join(__dirname, 'widget.html');
+    if (demoWidget) {
+      const demoPath = path.join(__dirname, '..', demoWidget.path, 'widget.html');
+      if (fs.existsSync(demoPath)) {
+        widgetPath = demoPath;
+      }
+    }
+    widget.loadFile(widgetPath);
     
     // Set widget ID and initial content
     widget.webContents.once('dom-ready', () => {
@@ -169,9 +197,9 @@ class WidgetManager {
       }
     }
     
-    // If no widgets exist, create a default one
+    // If no widgets exist, create a default weather widget
     if (Object.keys(savedWidgets).length === 0) {
-      this.createWidget();
+      this.createWidget({ template: 'cupertino-weather' });
     }
   }
 
@@ -190,11 +218,21 @@ const widgetManager = new WidgetManager();
 // App event handlers
 app.whenReady().then(() => {
   // Create application menu (hidden but enables shortcuts)
+  const demoSubmenu = Object.entries(DEMO_WIDGETS).map(([key, demo]) => ({
+    label: demo.name,
+    click: () => widgetManager.createWidget({ template: key })
+  }));
+
   const template = [
     {
       label: 'UberNotes',
       submenu: [
-        { label: 'New Widget', accelerator: 'CmdOrCtrl+N', click: () => widgetManager.createWidget() },
+        { label: 'New Note Widget', accelerator: 'CmdOrCtrl+N', click: () => widgetManager.createWidget() },
+        { type: 'separator' },
+        { 
+          label: 'Demo Widgets',
+          submenu: demoSubmenu
+        },
         { type: 'separator' },
         { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() }
       ]
@@ -206,7 +244,7 @@ app.whenReady().then(() => {
 
   // Register global shortcuts
   globalShortcut.register('CommandOrControl+Shift+N', () => {
-    widgetManager.createWidget();
+    widgetManager.createWidget({ template: 'cupertino-weather' }); // Default to weather widget
   });
 
   // Restore saved widgets
@@ -263,6 +301,17 @@ ipcMain.handle('save-content', (event, content) => {
       }
     }
   }
+});
+
+ipcMain.handle('get-demo-widgets', () => {
+  return DEMO_WIDGETS;
+});
+
+ipcMain.handle('create-demo-widget', (event, demoKey) => {
+  if (DEMO_WIDGETS[demoKey]) {
+    return widgetManager.createWidget({ template: demoKey });
+  }
+  return null;
 });
 
 // Enable autostart on macOS
