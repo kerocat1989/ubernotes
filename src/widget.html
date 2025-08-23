@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Widget</title>
+    <link rel="stylesheet" href="widget.css">
+</head>
+<body>
+    <div class="weather-widget" id="weatherWidget">
+        <div class="widget-header">
+            <div class="close-btn" id="closeBtn">×</div>
+        </div>
+        
+        <div class="time-display">
+            <div class="time" id="currentTime">--:--</div>
+            <div class="date" id="currentDate">Loading...</div>
+        </div>
+        
+        <div class="weather-display">
+            <div class="location">Cupertino, CA</div>
+            <div class="weather-info">
+                <div class="temperature" id="temperature">--°</div>
+                <div class="weather-desc" id="weatherDesc">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="resize-handle" id="resizeHandle"></div>
+    </div>
+
+    <script src="widget.js"></script>
+</body>
+</html>

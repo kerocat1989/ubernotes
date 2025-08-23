@@ -1,0 +1,48 @@
+# Node
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+.bun/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
+pids
+*.pid
+
+# Build / Coverage / Caches
+dist/
+build/
+out/
+release/
+coverage/
+.nyc_output/
+.cache/
+.eslintcache
+node_modules/.cache/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Electron artifacts
+*.dmg
+*.exe
+*.msi
+*.app
+*.AppImage
+*.deb
+*.rpm
+*.snap
+*.zip
+*.tar
+*.tar.gz
+*.asar
+Electron.app/
